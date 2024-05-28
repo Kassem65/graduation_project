@@ -7,9 +7,7 @@ use App\Http\Resources\StudentDispalyResource;
 use App\Models\Contest;
 use App\Models\ContestStudent;
 use App\Models\Problem;
-use App\Models\SolvedProblem;
 use App\Models\Student;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class ContestController extends Controller

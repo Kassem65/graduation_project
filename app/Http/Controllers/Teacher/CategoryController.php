@@ -8,11 +8,8 @@ use App\Http\Resources\CategoryStudentResource;
 use App\Models\Category;
 use App\Models\CategoryStudent;
 use App\Models\Student;
-use App\Models\Subject;
-use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
 
 class CategoryController extends Controller
 {
@@ -77,11 +74,35 @@ class CategoryController extends Controller
         })->unique();
         return $subjects ;
     }
+    public function getStudents(Category $category)
+    {
+        
+        $students = Student::whereHas('categories', function($query) use ($category) {
+            $query->where('category_id', $category->id);
+        })
+        ->with(['exams' => function($query) {
+            $query->select('exams.id', 'exams.name')
+                  ->withPivot('mark', 'code1', 'code2');
+        }, 'user'])
+        ->get(['students.id', 'students.phone_number', 'students.user_id']);
 
-    
-    
+        $result = $students->map(function($student) {
+            return [
+                'id' => $student->id,
+                'name' => $student->user->name,
+                'phone_number' => $student->phone_number,
+                'exams' => $student->exams->map(function($exam) {
+                    return [
+                        'id' => $exam->id,
+                        'name' => $exam->name,
+                        'mark' => $exam->pivot->mark,
+                        'code1' => $exam->pivot->code1,
+                        'code2' => $exam->pivot->code2
+                    ];
+                })
+            ];
+        });
+
+        return response()->json($result);
+    }
 }
-/**
-
-
- */

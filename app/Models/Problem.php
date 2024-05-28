@@ -12,7 +12,9 @@ class Problem extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'time_limit_ms','teacher_id' , 'diffculty','name' , 'description' , 'teacher_code_solve', 'active' , 'hint1' , 'hint2' , 'level' , 'in_bank', 'solutions'
+        'time_limit_ms','teacher_id' , 'diffculty','name' , 
+        'description', 'teacher_code_solve', 'active', 
+        'hint1', 'hint2', 'level', 'in_bank', 'solutions'
     ];
     protected $hidden = [
         'teacher_code_solve'

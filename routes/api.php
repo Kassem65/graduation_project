@@ -21,6 +21,7 @@ use App\Http\Controllers\Student\ProblemController as StudentProblemController;
 use App\Http\Controllers\Student\ProfileController;
 use App\Http\Controllers\Student\TagController as StudentTagController;
 use App\Http\Controllers\Teacher\AuthController as TeacherAuthController;
+use App\Http\Controllers\Teacher\SubjectController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -59,7 +60,6 @@ Route::group(['prefix' => 'adminstrator' , 'middleware' => ['auth:sanctum','admi
         Route::post('distribute' , [AdminStudentController::class , 'distribut\eCategories']);
     });
 });
-    
 
 Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']] , function(){
     Route::post('login' , [TeacherAuthController::class , 'login']);
@@ -87,7 +87,7 @@ Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']
     });
     Route::group(['prefix' => 'categories'] , function(){
         Route::get('/min' , [CategoryController::class, 'index']);
-        Route::get('/{category}/students' , [CategoryController::class , 'showCategoryStudent']);
+        Route::get('/{category}/students' , [CategoryController::class , 'getStudents']);
         Route::post('/add-marks' , [MarkController::class , 'addMarks']);
         Route::get('{category}/marksStudents', [MarkController::class, 'showMarks']);
         Route::post('{category}/attendance/',[CategoryController::class , 'checkStudents']);
@@ -96,6 +96,7 @@ Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']
 
     Route::group(['prefix' => 'exams'] , function(){
         Route::post('/edit-student-mark' , [ExamController::class, 'editMarkStudent']);
+        Route::post('/edit-student-exam' , [ExamController::class, 'editMarkExamStudent']);
         Route::post('/answers' , [ExamController::class, 'showStudentSolve']);
         Route::get('show/{exam}' , [ExamController::class , ' show']);
     });
@@ -107,9 +108,13 @@ Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']
         Route::delete('/{assessment}' , [AssessmentController::class , 'delete']) ;
         Route::get('details/{assessment}' , [AssessmentController::class, 'details']);
     });
-    Route::get('subjects' , [CategoryController::class , 'subjects']);
+    Route::group(['prefix' => 'subjects'] , function(){
+        Route::get('/', [SubjectController::class, 'index']);
+        Route::get('/{subject}/categories', [SubjectController::class, 'subjectCategories']);
+    });
+    // Route::get('subjects' , [CategoryController::class , 'subjects']);
 });
-//kassem
+
 Route::group(['prefix' => 'student' , 'middleware' => ['auth:sanctum','student']] , function(){
     
     Route::group(['prefix' => 'problems'] , function(){
@@ -156,20 +161,3 @@ Route::post('run' , function(Request $request){
 Route::get('test' , function (){
     return "hello" ;
 });
-
-//toker   
-
-/**
-
-6|ZENSmmvH6skQUf1IMpvEmqOFSsJeMDPEYCR6zqbo49d6d749
-192.168.108.243
-
- */
-
- /*
-show subjects 
-show emax in subjects 
-show students with mark with solve in exam 
-edit mark 
-
- */
