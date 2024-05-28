@@ -39,9 +39,13 @@ class ContestController extends Controller
             'name' => 'required|string',
             'duration' => 'integer',
             'start_at' => 'required|date_format:Y-m-d',
+            'description' => 'required|string',
+            'password' => 'required|string',
+            'scoure' => 'required',
+            'contest_time' => 'required',
             'min_level' => 'required|integer|min:1|max:10',
             'max_level' => 'required|integer|min:0|max:10',
-            'students' => 'array' 
+            'students' => 'array'
         ]);
         $scour = 0 ;
         $contest = $student->contests()->create($request->all());
