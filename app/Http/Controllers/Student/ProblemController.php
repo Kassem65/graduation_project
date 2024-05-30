@@ -53,23 +53,27 @@ class ProblemController extends Controller
     public function testCases(SolveProblem $solve){
         // return $solve ;
         $studentSolves = $solve->solveCases;
-        $teacherSolves = $solve->problem->testCases ;
+        $teacherSolves = $solve->problem->testCases ?? [];
+        
         $data = [] ;
         $data['solve'] = $solve->student_code ;
         $i = 0 ;
         foreach($studentSolves as $studentSolve){
-            $data['testCases'][$i]['input'] = $studentSolve['input'];
-            $data['testCases'][$i]['output'] = $studentSolve['output'];
-            $data['testCases'][$i]['answer'] = $teacherSolves[$i]['output'];
+            $data['testCases'][$i]['input'] = $studentSolve['input'] ?? ' ';
+            $data['testCases'][$i]['output'] = $studentSolve['output'] ?? ' ';
+            $data['testCases'][$i]['answer'] = $teacherSolves[$i]['output'] ?? ' ';
             $i++;
         }
-    
-
-
-        return response()->json([ 
+        $response = [
             'data' => $data,
-            'message' => 'good' ,
-        ],201);
+            'message' => 'good',
+        ];
+        
+        if (!empty($teacherSolves)) {
+            $response['test_cases'] = ' ';
+        }
+        
+        return response()->json($response, 201);
     }
     public function show(Problem $problem){
         $problem->testCase ;

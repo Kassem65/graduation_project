@@ -98,7 +98,7 @@ Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']
         Route::post('/edit-student-mark' , [ExamController::class, 'editMarkStudent']);
         Route::post('/edit-student-exam' , [ExamController::class, 'editMarkExamStudent']);
         Route::post('/answers' , [ExamController::class, 'showStudentSolve']);
-        Route::get('show/{exam}' , [ExamController::class , ' show']);
+        Route::get('show/{exam}' , [ExamController::class , 'show']);
     });
     Route::group(['prefix' => 'assessment'] , function(){
         Route::post('/stop/{assessment}' , [AssessmentController::class , 'stopAssessment']);
@@ -146,7 +146,6 @@ Route::group(['prefix' => 'student' , 'middleware' => ['auth:sanctum','student']
         Route::post('change' , [StudentCategoryController::class , 'changeCategory']);
         Route::get('/{category}' , [StudentCategoryController::class , 'show']);
     });
-    
 });
 
 

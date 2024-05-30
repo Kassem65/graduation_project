@@ -123,15 +123,52 @@ class ContestController extends Controller
             abort(403,'contest is over') ; 
     }
     public function show (Contest $contest){
+        $contest = Contest::with('students.user', 'problems')->findOrFail($contest->id);
+
         $students = $contest->students()->with('user:id,name')->get();
-        $response = $students->map(function ($student) {
+
+        $studentDetails = $students->map(function ($student) {
             return [
-                'id' => $student->user->id,
+                'id' => $student->id,
                 'name' => $student->user->name,
-                'pivot' => $student->pivot
             ];
-        });
-        return $response;
+        })->toArray();
+
+        $response = [
+            'contest' => [
+                'id' => $contest->id,
+                'name' => $contest->name,
+                'description' => $contest->description,
+                'start_at' => $contest->start_at,
+                'contest_time' => $contest->time,
+                'problems' => $contest->problems->map(function ($problem) {
+                    return [
+                        'id' => $problem->id,
+                        'name' => $problem->name,
+                    ];
+                })->toArray(),
+            ],
+            'students' => $studentDetails,
+        ];
+
+        return response()->json($response);
+        // $students = $contest->students()->with('user:id,name')->get();
+
+        // $response = $students->map(function ($student) use ($students, $contest) {
+        //     return [
+        //         'id' => $student->id,
+        //         'name' => $student->name,
+        //         'rank' => $student->pivot->rank,
+        //         'contest' => $contest,
+        //         'problems' => $contest->problems()->get()->map(function ($problem) {
+        //             return [
+        //                 'id' => $problem->id,
+        //                 'name' => $problem->name
+        //             ];
+        //         }),
+        //     ];
+        // });
+        // return $response;
     }
     
 }

@@ -9,7 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Contest extends Model
 {
     use HasFactory;
-    protected $fillable  = ['name' ,'duration','start_at' , 'password' , 'scoure', 'contest_time'] ;
+    protected $fillable  = [
+        'name' ,'duration','start_at' , 'password' , 'scoure', 
+        'contest_time', 'description',
+    ];
  
     public function problems(): BelongsToMany
     {
