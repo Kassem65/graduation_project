@@ -16,8 +16,8 @@ class StudentDispalyResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'first_name' => explode(' ', $this->user->name, 2)[0],
-            'last_name' => explode(' ', $this->user->name, 2)[1],
+            'first_name' => explode(' ', $this->user->name, 2)[0] ?? ' ',
+            'last_name' => explode(' ', $this->user->name, 2)[1] ?? ' ',
             'email' => $this->user->email,
             'phone_number' => $this->phone_number,
             'change_class_requests' => $this->requests,
