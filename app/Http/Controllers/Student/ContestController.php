@@ -8,6 +8,7 @@ use App\Models\Contest;
 use App\Models\ContestStudent;
 use App\Models\Problem;
 use App\Models\Student;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ContestController extends Controller
@@ -91,6 +92,7 @@ class ContestController extends Controller
        return $solve ;
     }
     public function join(Contest $contest,Request $request){
+        
         if($contest->students()->exists(auth()->user()->student->id))
         return response()->json([
             'messsage' => 'allready exists',
@@ -117,10 +119,11 @@ class ContestController extends Controller
     }
     protected function checkContestTime(Contest $contest){
         $currentDateTime = now();
-        if ($currentDateTime < $contest->start_at)
+        $contest_time =Carbon::parse($contest->contest_time);
+        if ($currentDateTime < $contest_time)
             abort(403,'contest not start yet');
         else if ($currentDateTime->subHours($contest->duration) > $contest->start_at)
-            abort(403,'contest is over') ; 
+            abort(403,'contest is over'); 
     }
     public function show (Contest $contest){
         $contest = Contest::with('students.user', 'problems')->findOrFail($contest->id);

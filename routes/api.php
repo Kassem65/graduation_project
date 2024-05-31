@@ -87,6 +87,7 @@ Route::group(['prefix' => 'teacher' , 'middleware' => ['auth:sanctum','teacher']
     });
     Route::group(['prefix' => 'categories'] , function(){
         Route::get('/min' , [CategoryController::class, 'index']);
+        Route::get('/{category}/details', [CategoryController::class, 'getCategoryDetails']);
         Route::get('/{category}/students' , [CategoryController::class , 'getStudents']);
         Route::post('/add-marks' , [MarkController::class , 'addMarks']);
         Route::get('{category}/marksStudents', [MarkController::class, 'showMarks']);

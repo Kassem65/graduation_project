@@ -17,7 +17,12 @@ class CategoryController extends Controller
         $categories = auth()->user()->teacher->categories;
         return CategoryResource::collection($categories);
     }
-    
+    public function getCategoryDetails(Category $category) {
+        $data = [];
+        $data['category'] = $category;
+        $data['exam_mark'] = $category->subject()->first()['exam_mark'];
+        return $data;
+    }
     public function showCategoryStudent(Category $category){
         $students = $category->students()->get();
         
@@ -80,10 +85,7 @@ class CategoryController extends Controller
         $students = Student::whereHas('categories', function($query) use ($category) {
             $query->where('category_id', $category->id);
         })
-        ->with(['exams' => function($query) {
-            $query->select('exams.id', 'exams.name')
-                  ->withPivot('mark', 'code1', 'code2');
-        }, 'user'])
+        ->with(['user'])
         ->get(['students.id', 'students.phone_number', 'students.user_id']);
 
         $result = $students->map(function($student) {
@@ -91,15 +93,6 @@ class CategoryController extends Controller
                 'id' => $student->id,
                 'name' => $student->user->name,
                 'phone_number' => $student->phone_number,
-                'exams' => $student->exams->map(function($exam) {
-                    return [
-                        'id' => $exam->id,
-                        'name' => $exam->name,
-                        'mark' => $exam->pivot->mark,
-                        'code1' => $exam->pivot->code1,
-                        'code2' => $exam->pivot->code2
-                    ];
-                })
             ];
         });
 
