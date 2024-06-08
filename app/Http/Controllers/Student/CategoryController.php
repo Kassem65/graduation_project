@@ -31,8 +31,16 @@ class CategoryController extends Controller
         
         $student = auth()->user()->student;
         
+        $data = ChangeCategoryRequest::where('student_id', $student->id)
+            ->where('new_category', $request->new_category)
+            ->first();
+        if ($data != null) {
+            return response()->json([
+                'error' => 'you are already in this category'
+            ]);
+        }
         $student->requests()->create($request->all());
-        return ['message' => 'added successfully'] ; 
+        return ['message' => 'category changed successfully'] ; 
 
     }
     public function show (Category $category){

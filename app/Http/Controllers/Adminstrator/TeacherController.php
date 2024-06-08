@@ -50,4 +50,10 @@ class TeacherController extends Controller
             'teacher' => $teacher
         ]);
     }
+    public function deleteTeacher(Teacher $teacher) {
+        $teacher->delete();
+        return response()->json([
+            'message' => 'teacher deleted successfully.'
+        ]);
+    }
 }

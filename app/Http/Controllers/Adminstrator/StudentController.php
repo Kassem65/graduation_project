@@ -22,6 +22,7 @@ class StudentController extends Controller
         $data['students'] = Student::all();
         $data['change_class_request'] = ChangeCategoryRequest::all()->map(function ($request) {
             return [
+                'id' => $request->id,
                 'student_name' => $request->student->user->name,
                 'old_class' => $request->old_category,
                 'new_class' => $request->new_category, 

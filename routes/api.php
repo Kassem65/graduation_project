@@ -3,6 +3,7 @@
 use App\Http\Controllers\Adminstrator\CategoryController as AdminstratorCategoryController;
 use App\Http\Controllers\Adminstrator\StudentController as AdminStudentController;
 use App\Http\Controllers\Adminstrator\ExamController as AdminstratorExamController;
+use App\Http\Controllers\Adminstrator\RequestController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CodeExecutorController;
 use App\Http\Controllers\ExcelImportController;
@@ -47,6 +48,9 @@ Route::post('student/register', [StudentAuthController::class, 'register']);
 Route::group(['prefix' => 'adminstrator' , 'middleware' => ['auth:sanctum','adminstrator']] , function(){
     Route::get('teachers', [TeacherController::class, 'index']);
     Route::post('teachers/add', [TeacherController::class, 'addTeacher']);
+    Route::delete('teacher/{teacher}', [TeacherController::class, 'deleteTeacher']);
+    
+    Route::post('change/{changeCategoryRequest}', [RequestController::class, 'accept']);
     Route::get('categories-with-subjects', [AdminstratorCategoryController::class, 'categoriesWithSubjects']);
     Route::get('exams', [AdminstratorExamController::class, 'index']);
     Route::get('exams/{exam}', [AdminstratorExamController::class, 'show']);
