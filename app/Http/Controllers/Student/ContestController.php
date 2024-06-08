@@ -134,6 +134,7 @@ class ContestController extends Controller
             return [
                 'id' => $student->id,
                 'name' => $student->user->name,
+                'rank' => $student->pivot->rank, 
             ];
         })->toArray();
 
