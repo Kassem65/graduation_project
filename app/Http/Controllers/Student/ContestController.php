@@ -120,10 +120,10 @@ class ContestController extends Controller
     protected function checkContestTime(Contest $contest){
         $currentDateTime = now();
         $contest_time =Carbon::parse($contest->contest_time);
-        if ($currentDateTime < $contest_time)
+        if ($currentDateTime < ($contest_time))
             abort(403,'contest not start yet');
-        else if ($currentDateTime->subHours($contest->duration) > $contest->start_at)
-            abort(403,'contest is over'); 
+        else if ($currentDateTime->subHours($contest->duration) > ($contest->start_at. ' ' .$contest->contest_time)) 
+            abort(403,'contest is over from');
     }
     public function show (Contest $contest){
         $contest = Contest::with('students.user', 'problems')->findOrFail($contest->id);
